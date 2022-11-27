@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="az.mamishov.mapper.UserMapper">
+    <resultMap id="user" type="az.mamishov.model.UserEntity">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="isActive" column="is_active" javaType="java.lang.Boolean" jdbcType="INTEGER"/>
+        <result property="roles" column="roles"/>
+    </resultMap>
+    
+    <select id="findByUsername" resultMap="user">
+        SELECT id, username, password, roles, is_active
+        FROM users
+        WHERE users.username = #{username}
+    </select>
+
+</mapper>
