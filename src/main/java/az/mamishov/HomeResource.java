@@ -33,7 +33,7 @@ public class HomeResource {
         } catch (BadCredentialsException exception) {
             throw new Exception("Incorrect username or password");
         }
-        final UserDetails userDetails =  userDetailsService
+        final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 

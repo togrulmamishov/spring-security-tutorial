@@ -9,4 +9,10 @@ import java.util.Optional;
 public interface UserMapper {
 
     Optional<UserEntity> findByUsername(String username);
+
+    UserEntity findById(Integer id);
+
+    void insertUser(UserEntity user);
+
+    Integer getInsertedId();
 }

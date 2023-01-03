@@ -18,4 +18,22 @@
         WHERE users.username = #{username}
     </select>
 
+    <select id="findById" resultMap="user">
+        SELECT id, username, password, roles, is_active
+        FROM users
+        WHERE users.id = #{id}
+    </select>
+
+    <insert id="insertUser" parameterType="az.mamishov.model.UserEntity" flushCache="true">
+        <selectKey resultType="int" keyProperty="id" order="BEFORE">
+            SELECT USERS_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO users(id, username, password, roles, is_active)
+        VALUES (#{id}, #{username}, #{password}, #{roles}, #{isActive})
+    </insert>
+    
+    <select id="getInsertedId" resultType="Integer">
+        SELECT USERS_SEQ.CURRVAL FROM DUAL
+    </select>
+
 </mapper>
