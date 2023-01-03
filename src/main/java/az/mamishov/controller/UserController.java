@@ -3,8 +3,10 @@ package az.mamishov.controller;
 import az.mamishov.dto.UserRequest;
 import az.mamishov.dto.UserResponse;
 import az.mamishov.mapper.UserMapper;
+import az.mamishov.mapstruct.UserDtoMapper;
 import az.mamishov.model.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,30 +22,20 @@ public class UserController {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    private final UserDtoMapper mapper;
+
     @GetMapping("/user/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id) {
         var user = userMapper.findById(id);
-        return ResponseEntity.ok(
-                UserResponse.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .isActive(user.getIsActive())
-                        .roles(user.getRoles())
-                        .build()
-        );
+        var response = mapper.userEntityToResponse(user);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/user")
     public ResponseEntity<Object> registerUser(@RequestBody UserRequest userRequest) {
         final String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
-
-        UserEntity user = UserEntity.builder()
-                .username(userRequest.getUsername())
-                .password(encodedPassword)
-                .roles(userRequest.getRoles())
-                .isActive(userRequest.getIsActive())
-                .build();
-
+        UserEntity user = mapper.userRequestToEntity(userRequest);
+        user.setPassword(encodedPassword);
         userMapper.insertUser(user);
         Integer id = userMapper.getInsertedId();
         URI uri = ServletUriComponentsBuilder
