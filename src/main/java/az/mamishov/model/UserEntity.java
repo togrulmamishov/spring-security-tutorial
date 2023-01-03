@@ -1,8 +1,14 @@
 package az.mamishov.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
 
     private Integer id;
